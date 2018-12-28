@@ -1,0 +1,19 @@
+apply plugin: "maven-publish"
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'com.dwvip.demolib'
+            artifactId project.name
+            version jar.version
+            //若是war包，就写components.web,若是jar包，就写components.java
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url = 'file://' + new File(rootDir.parentFile, 'dwvipRepo').absolutePath
+        }
+    }
+}
+

@@ -1,0 +1,69 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'org.ajoberstar.grgit:grgit-core:3.0.0'
+        classpath 'org.ajoberstar.grgit:grgit-gradle:3.0.0'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+//        maven { url 'file://' + new File(rootDir.parentFile, 'dwvipRepo').absolutePath }
+//        maven { url 'https://github.com/dwvip/repo/raw/master' }
+        if(!(rootProject.name.indexOf("Debug") > 0)) {
+            maven { url 'https://dwvip.github.io/repo' }
+        }
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+import org.ajoberstar.grgit.Grgit
+
+task cloneLibSrc {
+    doLast {
+        doClone('demoLib', 'git@github.com:andych008/demoLib.git', 'master')
+    }
+}
+
+void doClone(String dirName, String remote, String branch) {
+    File dir = new File('libSrc/'+dirName)
+    if(!dir.exists()) {
+        def grgit = Grgit.clone(dir: dir, uri: remote, refToCheckout: branch)
+    }
+    def grgit = Grgit.open(dir: dir)
+    grgit.checkout(branch: branch)
+    grgit.pull(rebase: false)
+}
+
+
+ext{
+    useSrc = (rootProject.name.indexOf("Debug") > 0)
+
+    println("rootProject.ext.useSrc = " + rootProject.ext.useSrc)
+    if (useSrc) {
+        dependencies = [
+                "droidLib" : project(':droidLib')
+        ]
+    } else {
+        dependencies = [
+                "droidLib" : 'com.dwvip.demolib:droidLib:1.0'
+        ]
+    }
+}
+
+

@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+##############################################################################
+##
+##  script to build jar & aar script for UN*X
+##
+##############################################################################
+
+chmod +x gradlew
+
+./gradlew javaLib:publish
+./gradlew wxImg:uploadResultArchives
+./gradlew droidLib:uploadArchives

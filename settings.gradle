@@ -1,0 +1,14 @@
+include ':app'
+
+//rootProject.name+="-Debug"
+
+if (rootProject.name.indexOf("Debug") > 0) {
+    include ':droidLib'
+    project(':droidLib').projectDir = new File(settingsDir, './libSrc/demoLib/droidLib')
+}
+
+
+
+
+
+

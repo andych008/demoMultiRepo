@@ -1,0 +1,22 @@
+apply plugin: 'maven'
+
+configurations {
+    resultArchives
+}
+
+uploadResultArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: 'file://' + new File(rootDir.parentFile, 'dwvipRepo').absolutePath)
+            pom.project {
+                groupId 'com.dwvip.demolib'
+                artifactId project.name
+                version android.defaultConfig.versionName
+            }
+        }
+    }
+}
+
+artifacts{
+    resultArchives file: file(project.ext.aarPath)
+}
